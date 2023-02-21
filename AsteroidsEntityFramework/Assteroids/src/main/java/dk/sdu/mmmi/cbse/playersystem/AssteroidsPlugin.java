@@ -9,11 +9,11 @@ import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
 import java.util.Random;
 
-public class EnemyPlugin implements IGamePluginService {
+public class AssteroidsPlugin implements IGamePluginService {
 
     private Entity enemy;
 
-    public EnemyPlugin() {
+    public AssteroidsPlugin() {
     }
 
     @Override
@@ -35,7 +35,7 @@ public class EnemyPlugin implements IGamePluginService {
         float y = random.nextFloat(gameData.getDisplayWidth()+1);
         float radians = 3.1415f / 2;
         
-        Entity playerShip = new Enemy();
+        Entity playerShip = new Assteroids();
         playerShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
         playerShip.add(new PositionPart(x, y, radians));
         

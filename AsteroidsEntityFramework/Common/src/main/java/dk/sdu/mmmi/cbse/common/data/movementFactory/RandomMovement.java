@@ -1,26 +1,15 @@
-package dk.sdu.mmmi.cbse.playersystem.movementFactory;
+package dk.sdu.mmmi.cbse.common.data.movementFactory;
 
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 
 public class RandomMovement implements MovementFactory{
+
     MovingPart movingPart;
     @Override
     public void getNewMovement(MovingPart movingPart) {
         this.movingPart = movingPart;
-        Thread thread = new Thread(() -> {
-            while (true){
-                isUp();
-                isHorizontalMovement();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        thread.start();
-
-
+        isUp();
+        isHorizontalMovement();
     }
     public void isUp(){
         if(Math.random()<0.8){

@@ -5,19 +5,20 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
-import dk.sdu.mmmi.cbse.common.data.movementFactory.RandomMovement;
+import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.playersystem.movementFactory.RandomMovement;
 
 /**
  *
  * @author jcs
  */
-public class EnemyControlSystem implements IEntityProcessingService {
+public class AssteroidsControlSystem implements IEntityProcessingService {
     MovementFactory movementFactory;
 
-    public EnemyControlSystem() {
-        movementFactory = new RandomMovement();
+    public AssteroidsControlSystem() {
+        movementFactory = new ConstantRandomMovement();
     }
 
     private void updateShape(Entity entity) {
@@ -27,18 +28,19 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float x = positionPart.getX();
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
+        int scale = 20;
 
-        shapex[0] = (float) (x + Math.cos(radians) * 8);
-        shapey[0] = (float) (y + Math.sin(radians) * 8);
+        shapex[0] = (float) (x + Math.cos(radians) * scale);
+        shapey[0] = (float) (y + Math.sin(radians) * scale);
 
-        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 8);
-        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * 8);
+        shapex[1] = (float) (x + Math.cos(radians - 3.1415f/2) * scale);
+        shapey[1] = (float) (y + Math.sin(radians - 3.1145f/2) * scale);
 
-        shapex[2] = (float) (x + Math.cos(radians + 3.1415f) * 5);
-        shapey[2] = (float) (y + Math.sin(radians + 3.1415f) * 5);
+        shapex[2] = (float) (x + Math.cos(radians + 3.1415f) * scale);
+        shapey[2] = (float) (y + Math.sin(radians + 3.1415f) * scale);
 
-        shapex[3] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * 8);
-        shapey[3] = (float) (y + Math.sin(radians + 4 * 3.1415f / 5) * 8);
+        shapex[3] = (float) (x + Math.cos(radians + 3.1415f/2) * scale);
+        shapey[3] = (float) (y + Math.sin(radians + 3.1415f/2) * scale);
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
@@ -46,21 +48,16 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        int counter = 0;
-        for (Entity enemy : world.getEntities(Enemy.class)) {
+        for (Entity enemy : world.getEntities(Assteroids.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
 
-            calculateMovement(movingPart);
+            this.movementFactory.getNewMovement(movingPart);
 
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
 
             updateShape(enemy);
         }
-    }
-
-    private void calculateMovement(MovingPart movingPart){
-        this.movementFactory.getNewMovement(movingPart);
     }
 }

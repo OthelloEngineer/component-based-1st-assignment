@@ -11,10 +11,8 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
-import dk.sdu.mmmi.cbse.playersystem.EnemyControlSystem;
-import dk.sdu.mmmi.cbse.playersystem.EnemyPlugin;
-import dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
-import dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
+import dk.sdu.mmmi.cbse.playersystem.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +42,28 @@ public class Game
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-
+        final int asteroidCount = 5;
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
+        List<IGamePluginService> assPlugins = new ArrayList<>() {{
+            for (int i = 0; i < asteroidCount; i++) {
+                add(new AssteroidsPlugin());
+            }
+        }};
 
         IEntityProcessingService playerProcess = new PlayerControlSystem();
         IEntityProcessingService enemyProcess = new EnemyControlSystem();
+        List<IEntityProcessingService> assProcessors = new ArrayList<>() {{
+            for (int i = 0; i < 1; i++) {
+                add(new AssteroidsControlSystem());
+            }
+        }};
 
         entityPlugins.add(enemyPlugin);
         entityPlugins.add(playerPlugin);
+        entityPlugins.addAll(assPlugins);
+
+        entityProcessors.addAll(assProcessors);
         entityProcessors.add(enemyProcess);
         entityProcessors.add(playerProcess);
         // Lookup all Game Plugins using ServiceLoader
@@ -87,7 +98,7 @@ public class Game
     private void draw() {
         for (Entity entity : world.getEntities()) {
 
-            sr.setColor(1, 1, 1, 1);
+            sr.setColor(entity.getColor());
 
             sr.begin(ShapeRenderer.ShapeType.Line);
 
