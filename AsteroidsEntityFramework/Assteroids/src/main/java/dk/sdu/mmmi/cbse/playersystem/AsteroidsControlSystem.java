@@ -8,16 +8,14 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.playersystem.movementFactory.RandomMovement;
-
 /**
  *
  * @author jcs
  */
-public class AssteroidsControlSystem implements IEntityProcessingService {
+public class AsteroidsControlSystem implements IEntityProcessingService {
     MovementFactory movementFactory;
 
-    public AssteroidsControlSystem() {
+    public AsteroidsControlSystem() {
         movementFactory = new ConstantRandomMovement();
     }
 
@@ -48,7 +46,7 @@ public class AssteroidsControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity enemy : world.getEntities(Assteroids.class)) {
+        for (Entity enemy : world.getEntities(Asteroids.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
 

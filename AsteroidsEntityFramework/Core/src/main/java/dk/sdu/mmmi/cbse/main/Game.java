@@ -45,25 +45,25 @@ public class Game
         final int asteroidCount = 5;
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
-        List<IGamePluginService> assPlugins = new ArrayList<>() {{
+        List<IGamePluginService> asPlugins = new ArrayList<>() {{
             for (int i = 0; i < asteroidCount; i++) {
-                add(new AssteroidsPlugin());
+                add(new AsteroidsPlugin());
             }
         }};
 
         IEntityProcessingService playerProcess = new PlayerControlSystem();
         IEntityProcessingService enemyProcess = new EnemyControlSystem();
-        List<IEntityProcessingService> assProcessors = new ArrayList<>() {{
+        List<IEntityProcessingService> asProcessors = new ArrayList<>() {{
             for (int i = 0; i < 1; i++) {
-                add(new AssteroidsControlSystem());
+                add(new AsteroidsControlSystem());
             }
         }};
 
         entityPlugins.add(enemyPlugin);
         entityPlugins.add(playerPlugin);
-        entityPlugins.addAll(assPlugins);
+        entityPlugins.addAll(asPlugins);
 
-        entityProcessors.addAll(assProcessors);
+        entityProcessors.addAll(asProcessors);
         entityProcessors.add(enemyProcess);
         entityProcessors.add(playerProcess);
         // Lookup all Game Plugins using ServiceLoader
