@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
+import com.badlogic.gdx.Game;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -10,13 +11,16 @@ import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.Movement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+
+import static com.badlogic.gdx.math.MathUtils.random;
+
 /**
  *
  * @author jcs
  */
 public class AsteroidsControlSystem implements IEntityProcessingService {
     MovementFactory movementFactory;
-
+    float asteroidTimer = 0;
     public AsteroidsControlSystem() {
         movementFactory = new ConstantRandomMovement();
     }
@@ -56,14 +60,31 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
             if(lifePart.isIsHit() && lifePart.getExpiration()<0){
                 handleCollider(world, (Asteroids) enemy);
             }
+            asteroidSpawner(world, gameData);
             this.movementFactory.getNewMovement(movingPart);
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
             updateShape(enemy);
+
+        }
+    }
+
+    private void asteroidSpawner(World world, GameData gameData){
+        asteroidTimer += gameData.getDelta();
+        if(asteroidTimer >20) {
+            System.out.println("hello");
+            Entity entity = new Asteroids();
+            float x = random.nextFloat(gameData.getDisplayWidth());
+            float y = random.nextFloat(gameData.getDisplayWidth());
+            float radians = random.nextFloat((float)Math.PI*2);
+            entity.add(new MovingPart(10, 200, 200, 3));
+            entity.add(new PositionPart(x, y, radians));
+            entity.add(new LifePart(100,20));
+            world.addEntity(entity);
+            asteroidTimer = 0;
         }
     }
     private void handleCollider(World world, Asteroids enemy){
-        System.out.println("enemy was hit");
         float newRadius = enemy.getRadius()/2;
         if(newRadius<5){
             world.removeEntity(enemy);
@@ -75,9 +96,9 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
         Entity newAsteroid = new Asteroids();
         newAsteroid.setRadius(newRadius);
         PositionPart oldPos = enemy.getPart(PositionPart.class);
-
+        oldPos.setRadians((float) (oldPos.getRadians()+Math.PI/4));
         newAsteroid.add(new MovingPart(10, 200, 200, 3));
-        newAsteroid.add(new PositionPart(oldPos.getX()+10, oldPos.getY()+10, (float) (oldPos.getRadians()-Math.PI)));
+        newAsteroid.add(new PositionPart(oldPos.getX()+10, oldPos.getY()+10, (float) (oldPos.getRadians()-Math.PI*1.5)));
         newAsteroid.add(new LifePart(100,20));
         world.addEntity(newAsteroid);
     }

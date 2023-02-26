@@ -31,7 +31,7 @@ public class Game
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IGamePluginService> entityPlugins = new ArrayList<>();
     private World world = new World();
-
+    private float asteroidTimer = 0;
     private IPostEntityProcessingService collisionDetector;
 
     @Override
@@ -102,6 +102,7 @@ public class Game
             entityProcessorService.process(gameData, world);
             this.collisionDetector.process(gameData, world);
         }
+
     }
 
     private void draw() {

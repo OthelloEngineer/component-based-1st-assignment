@@ -62,7 +62,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
         }
     }
     private void handleCollider(World world, Entity enemy){
-        System.out.println("enemy was hit");
         world.removeEntity(enemy);
     }
     private void calculateMovement(MovingPart movingPart){

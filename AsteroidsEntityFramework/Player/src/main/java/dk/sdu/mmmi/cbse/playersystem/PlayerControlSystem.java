@@ -66,7 +66,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
     }
 
     private void handleCollider(World world, Entity player){
-        System.out.println("here");
         world.removeEntity(player);
     }
 

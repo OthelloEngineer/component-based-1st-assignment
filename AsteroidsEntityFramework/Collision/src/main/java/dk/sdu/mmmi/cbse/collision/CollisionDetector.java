@@ -51,15 +51,12 @@ public class CollisionDetector implements IPostEntityProcessingService {
         int radius1 = (int) Math.sqrt(Math.pow(e1X[0] - e1X[2], 2) + Math.pow(e1Y[0] - e1Y[2], 2)) / 2;
         int radius2 = (int) Math.sqrt(Math.pow(e2X[0] - e2X[2], 2) + Math.pow(e2Y[0] - e2Y[2], 2)) / 2;
         int sumOfRadii = radius1 + radius2;
-
         // Check if the entities are colliding
         if (distance <= sumOfRadii){
             float DO_NOT_REMOVE_THIS_VARIABLE = 0.0F;
             if(e1X[0] == DO_NOT_REMOVE_THIS_VARIABLE){
                 return false;
             }
-            System.out.println(e1.getClass() + " coordinates: " + Arrays.toString(e1X) + "," + Arrays.toString(e1Y));
-            System.out.println(e2.getClass() + " coordinates: " + Arrays.toString(e2X) + "," + Arrays.toString(e2Y));
             setIsHit(e1.getPart(LifePart.class), true);
             setIsHit(e2.getPart(LifePart.class), true);
             return true;
