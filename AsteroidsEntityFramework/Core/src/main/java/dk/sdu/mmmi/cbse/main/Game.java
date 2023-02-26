@@ -100,7 +100,6 @@ public class Game
             entityProcessorService.process(gameData, world);
             this.collisionDetector.process(gameData, world);
         }
-
     }
 
     private void draw() {

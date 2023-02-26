@@ -12,11 +12,9 @@ public abstract class ShooterPlugin {
     public void resetCooldown(){
         this.projectileCooldown = maxProjectileCooldown;
     }
-
     public void decrementCooldown(float dt){
         projectileCooldown -= dt;
     }
-
     public boolean isOffCooldown(){
         return projectileCooldown <= 0;
     }

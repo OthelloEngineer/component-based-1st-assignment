@@ -8,7 +8,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
-
 import java.util.Random;
 
 public class AsteroidsPlugin implements IGamePluginService, IRunTimeInstantiator {
@@ -20,14 +19,12 @@ public class AsteroidsPlugin implements IGamePluginService, IRunTimeInstantiator
 
     @Override
     public void start(GameData gameData, World world) {
-        
         // Add entities to the world
         asteroid = createAsteroid(gameData);
         world.addEntity(asteroid);
     }
 
     private Entity createAsteroid(GameData gameData) {
-
         float deacceleration = 10;
         float acceleration = 200;
         float maxSpeed = 200;
