@@ -7,8 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
 
-public class BulletPlugin implements IGamePluginService {
+public class BulletPlugin implements IGamePluginService, IRunTimeInstantiator {
 
     private Entity player;
 
@@ -45,4 +46,12 @@ public class BulletPlugin implements IGamePluginService {
         world.removeEntity(player);
     }
 
+    @Override
+    public Entity createEntity(PositionPart positionPart) {
+        Bullet newBullet = new Bullet();
+        newBullet.add(new MovingPart(1, 500, 500, 0));
+        newBullet.add(new LifePart(100,1));
+        newBullet.add(positionPart);
+        return newBullet;
+    }
 }

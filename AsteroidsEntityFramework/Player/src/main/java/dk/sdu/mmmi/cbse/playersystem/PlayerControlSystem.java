@@ -10,9 +10,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
 
 /**
  *
@@ -25,7 +22,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-
         for (Entity player : world.getEntities(Player.class)) {
             PositionPart positionPart = player.getPart(PositionPart.class);
             MovingPart movingPart = player.getPart(MovingPart.class);
@@ -39,23 +35,22 @@ public class PlayerControlSystem implements IEntityProcessingService {
             lifePart.process(gameData, player);
             movingPart.process(gameData, player);
             positionPart.process(gameData, player);
-            if(gameData.getKeys().isDown(SPACE) && ((Player) player).bulletCooldown <0){
-                shoot(player, world);
+            if(gameData.getKeys().isDown(SPACE)){
+                shoot((Player)player, world);
             }
-            ((Player) player).decrementCD(gameData.getDelta());
+            ((Player) player).shooterPlugin.decrementCooldown(gameData.getDelta());
             updateShape(player);
         }
     }
-    private void shoot(Entity entity, World world){
-        Bullet bullet = new Bullet();
-        bullet.add(new MovingPart(1, 500, 500, 0));
-        ((Player) entity).setBulletCooldown();
-        float outX = entity.getShapeX()[0];
-        float outy = entity.getShapeY()[0];
-        PositionPart part = entity.getPart(PositionPart.class);
-        bullet.add(new PositionPart(outX, outy, part.getRadians()));
-        bullet.add(new LifePart(100,1));
+    private void shoot(Player player, World world){
+        if(!player.shooterPlugin.isOffCooldown()) return;
+        float outX = player.getShapeX()[0];
+        float outy = player.getShapeY()[0];
+        PositionPart part = player.getPart(PositionPart.class);
+        PositionPart positionPart = new PositionPart(outX, outy, part.getRadians());
+        Entity bullet = player.shooterPlugin.getRunTimeInstantiator().createEntity(positionPart);
         world.addEntity(bullet);
+        player.shooterPlugin.resetCooldown();
     }
     private void updateShape(Entity entity) {
         float[] shapex = entity.getShapeX();

@@ -7,10 +7,11 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
 
 import java.util.Random;
 
-public class AsteroidsPlugin implements IGamePluginService {
+public class AsteroidsPlugin implements IGamePluginService, IRunTimeInstantiator {
 
     private Entity asteroid;
 
@@ -34,7 +35,6 @@ public class AsteroidsPlugin implements IGamePluginService {
         Random random = new Random();
         float x = random.nextFloat(gameData.getDisplayWidth());
         float y = random.nextFloat(gameData.getDisplayWidth());
-        //float radians = 3.1415f / 2;
         float radians = random.nextFloat((float)Math.PI*2);
         Entity asteroid = new Asteroids();
         asteroid.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
@@ -49,4 +49,8 @@ public class AsteroidsPlugin implements IGamePluginService {
         world.removeEntity(asteroid);
     }
 
+    @Override
+    public Entity createEntity(PositionPart positionPart) {
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+
 import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
 
 
@@ -9,7 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Entity implements Serializable {
+public abstract class Entity implements Serializable{
+
     private final UUID ID = UUID.randomUUID();
 
     private Color color = Color.LIME;
@@ -46,7 +48,7 @@ public class Entity implements Serializable {
     public void setRadius(float r){
         this.radius = r;
     }
-    
+
     public float getRadius(){
         return radius;
     }
