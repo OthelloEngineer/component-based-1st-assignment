@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -31,7 +32,6 @@ public class Game
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IGamePluginService> entityPlugins = new ArrayList<>();
     private World world = new World();
-    private float asteroidTimer = 0;
     private IPostEntityProcessingService collisionDetector;
 
     @Override
@@ -50,7 +50,7 @@ public class Game
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-        final int asteroidCount = 10;
+        final int asteroidCount = 5;
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
         List<IGamePluginService> asPlugins = new ArrayList<>() {{
@@ -61,18 +61,16 @@ public class Game
 
         IEntityProcessingService playerProcess = new PlayerControlSystem();
         IEntityProcessingService enemyProcess = new EnemyControlSystem();
-        List<IEntityProcessingService> asProcessors = new ArrayList<>() {{
-            for (int i = 0; i < 1; i++) {
-                add(new AsteroidsControlSystem());
-            }
-        }};
+        IEntityProcessingService asProcessors = new AsteroidsControlSystem();
+        IEntityProcessingService bulletProccesor = new BulletControlSystem();
 
         entityPlugins.add(enemyPlugin);
         entityPlugins.add(playerPlugin);
         entityPlugins.addAll(asPlugins);
-        entityProcessors.addAll(asProcessors);
+        entityProcessors.add(asProcessors);
         entityProcessors.add(enemyProcess);
         entityProcessors.add(playerProcess);
+        entityProcessors.add(bulletProccesor);
         // Lookup all Game Plugins using ServiceLoader
 
         for (IGamePluginService iGamePlugin : entityPlugins) {

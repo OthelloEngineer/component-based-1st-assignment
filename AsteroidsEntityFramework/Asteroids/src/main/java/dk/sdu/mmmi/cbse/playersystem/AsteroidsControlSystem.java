@@ -1,6 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
-import com.badlogic.gdx.Game;
+
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -8,7 +8,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
-import dk.sdu.mmmi.cbse.common.data.movementFactory.Movement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
@@ -60,18 +59,17 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
             if(lifePart.isIsHit() && lifePart.getExpiration()<0){
                 handleCollider(world, (Asteroids) enemy);
             }
-            asteroidSpawner(world, gameData);
+           // asteroidSpawner(world, gameData);
             this.movementFactory.getNewMovement(movingPart);
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
             updateShape(enemy);
-
         }
     }
 
     private void asteroidSpawner(World world, GameData gameData){
         asteroidTimer += gameData.getDelta();
-        if(asteroidTimer >20) {
+        if(asteroidTimer >50) {
             System.out.println("hello");
             Entity entity = new Asteroids();
             float x = random.nextFloat(gameData.getDisplayWidth());
@@ -91,15 +89,15 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
             return;
         }
         LifePart lifePart = enemy.getPart(LifePart.class);
-        lifePart.setExpiration(20);
+        lifePart.setExpiration(5);
         enemy.setRadius(newRadius);
         Entity newAsteroid = new Asteroids();
         newAsteroid.setRadius(newRadius);
         PositionPart oldPos = enemy.getPart(PositionPart.class);
         oldPos.setRadians((float) (oldPos.getRadians()+Math.PI/4));
         newAsteroid.add(new MovingPart(10, 200, 200, 3));
-        newAsteroid.add(new PositionPart(oldPos.getX()+10, oldPos.getY()+10, (float) (oldPos.getRadians()-Math.PI*1.5)));
-        newAsteroid.add(new LifePart(100,20));
+        newAsteroid.add(new PositionPart(oldPos.getX()+10, oldPos.getY()+10, (float) (oldPos.getRadians()-Math.PI*1)));
+        newAsteroid.add(new LifePart(100,5));
         world.addEntity(newAsteroid);
     }
 }

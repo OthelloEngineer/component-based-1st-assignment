@@ -1,61 +1,44 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package dk.sdu.mmmi.cbse.bulletsystem;
 
-import dk.sdu.mmmi.cbse.bulletsystem.Bullet;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
+import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.bulletsystem.Bullet;
 
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
 
 /**
  *
  * @author jcs
  */
-public class PlayerControlSystem implements IEntityProcessingService {
-
-    public PlayerControlSystem() {
+public class BulletControlSystem implements IEntityProcessingService {
+    MovementFactory movementFactory;
+    public BulletControlSystem() {
+        movementFactory = new ConstantRandomMovement();
     }
 
     @Override
     public void process(GameData gameData, World world) {
 
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity player : world.getEntities(Bullet.class)) {
             PositionPart positionPart = player.getPart(PositionPart.class);
             MovingPart movingPart = player.getPart(MovingPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
             if(lifePart.isIsHit()) {
                 handleCollider(world, player);
             }
-            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(UP));
+            this.movementFactory.getNewMovement(movingPart);
             lifePart.process(gameData, player);
             movingPart.process(gameData, player);
             positionPart.process(gameData, player);
-            if(gameData.getKeys().isDown(SPACE) && ((Player) player).bulletCooldown <0){
-                shoot(player, world);
-            }
-            ((Player) player).decrementCD(gameData.getDelta());
             updateShape(player);
         }
-    }
-    private void shoot(Entity entity, World world){
-        Bullet bullet = new Bullet();
-        bullet.add(new MovingPart(1, 500, 500, 0));
-        ((Player) entity).setBulletCooldown();
-        float outX = entity.getShapeX()[0];
-        float outy = entity.getShapeY()[0];
-        PositionPart part = entity.getPart(PositionPart.class);
-        bullet.add(new PositionPart(outX, outy, part.getRadians()));
-        bullet.add(new LifePart(100,1));
-        world.addEntity(bullet);
     }
     private void updateShape(Entity entity) {
         float[] shapex = entity.getShapeX();
@@ -81,8 +64,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
         entity.setShapeY(shapey);
     }
 
-    private void handleCollider(World world, Entity player){
-        world.removeEntity(player);
+    private void handleCollider(World world, Entity bullet){
+        world.removeEntity(bullet);
     }
 
 }

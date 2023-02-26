@@ -8,6 +8,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,21 +21,25 @@ public class CollisionDetector implements IPostEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         this.entityList = world.getEntities().stream().toList();
-        boolean flag = false;
+        List<Entity> colliders = new ArrayList<>();
         for (int i = 0; i < entityList.size(); i++) {
             for (int j = i + 1; j < entityList.size(); j++) {
-                flag = isColliding(entityList.get(i), entityList.get(j), world);
-                if(flag) {
-                    break;
+                if(isColliding(entityList.get(i), entityList.get(j))) {
+                    colliders.add(entityList.get(i));
+                    colliders.add(entityList.get(j));
                 }
             }
-            if(flag) {
-                break;
-            }
         }
+        colliders.forEach(x-> ((LifePart)x.getPart(LifePart.class)).setIsHit(true));
     }
 
-    private boolean isColliding(Entity e1, Entity e2, World world){
+    private boolean isColliding(Entity e1, Entity e2){
+        LifePart e1Life = e1.getPart(LifePart.class);
+        LifePart e2Life = e1.getPart(LifePart.class);
+        float expiration = e1Life.getExpiration() + e2Life.getExpiration();
+        if(expiration>0){
+            return false;
+        }
         float[] e1Y = e1.getShapeY();
         float[] e1X = e1.getShapeX();
         float[] e2Y = e2.getShapeY();
@@ -53,16 +58,10 @@ public class CollisionDetector implements IPostEntityProcessingService {
         int sumOfRadii = radius1 + radius2;
         // Check if the entities are colliding
         if (distance <= sumOfRadii){
-            float DO_NOT_REMOVE_THIS_VARIABLE = 0.0F;
-            if(e1X[0] == DO_NOT_REMOVE_THIS_VARIABLE){
-                return false;
-            }
-            setIsHit(e1.getPart(LifePart.class), true);
-            setIsHit(e2.getPart(LifePart.class), true);
             return true;
         }
-        setIsHit(e1.getPart(LifePart.class), false);
-        setIsHit(e2.getPart(LifePart.class), false);
+        setIsHit(e1Life, false);
+        setIsHit(e2Life, false);
         return false;
     }
     public void setIsHit(LifePart lifePart, boolean isHit){
