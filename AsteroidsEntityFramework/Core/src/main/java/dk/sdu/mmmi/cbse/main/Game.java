@@ -50,7 +50,7 @@ public class Game
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-        final int asteroidCount = 5;
+        final int asteroidCount = 10;
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
         List<IGamePluginService> asPlugins = new ArrayList<>() {{
@@ -102,19 +102,14 @@ public class Game
             entityProcessorService.process(gameData, world);
             this.collisionDetector.process(gameData, world);
         }
-
     }
 
     private void draw() {
         for (Entity entity : world.getEntities()) {
-            entity.getPart(LifePart.class);
             sr.setColor(entity.getColor());
-
             sr.begin(ShapeRenderer.ShapeType.Line);
-
             float[] shapex = entity.getShapeX();
             float[] shapey = entity.getShapeY();
-
             for (int i = 0, j = shapex.length - 1;
                     i < shapex.length;
                     j = i++) {

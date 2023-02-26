@@ -5,8 +5,10 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,17 +16,25 @@ import java.util.List;
  * @author jcs
  */
 public class CollisionDetector implements IPostEntityProcessingService {
+    List<Entity> entityList;
     @Override
     public void process(GameData gameData, World world) {
-        List<Entity> entityList = world.getEntities().stream().toList();
+        this.entityList = world.getEntities().stream().toList();
+        boolean flag = false;
         for (int i = 0; i < entityList.size(); i++) {
             for (int j = i + 1; j < entityList.size(); j++) {
-                isColliding(entityList.get(i), entityList.get(j));
+                flag = isColliding(entityList.get(i), entityList.get(j), world);
+                if(flag) {
+                    break;
+                }
+            }
+            if(flag) {
+                break;
             }
         }
     }
 
-    private void isColliding(Entity e1, Entity e2){
+    private boolean isColliding(Entity e1, Entity e2, World world){
         float[] e1Y = e1.getShapeY();
         float[] e1X = e1.getShapeX();
         float[] e2Y = e2.getShapeY();
@@ -44,12 +54,19 @@ public class CollisionDetector implements IPostEntityProcessingService {
 
         // Check if the entities are colliding
         if (distance <= sumOfRadii){
+            float DO_NOT_REMOVE_THIS_VARIABLE = 0.0F;
+            if(e1X[0] == DO_NOT_REMOVE_THIS_VARIABLE){
+                return false;
+            }
+            System.out.println(e1.getClass() + " coordinates: " + Arrays.toString(e1X) + "," + Arrays.toString(e1Y));
+            System.out.println(e2.getClass() + " coordinates: " + Arrays.toString(e2X) + "," + Arrays.toString(e2Y));
             setIsHit(e1.getPart(LifePart.class), true);
             setIsHit(e2.getPart(LifePart.class), true);
-            return;
+            return true;
         }
         setIsHit(e1.getPart(LifePart.class), false);
         setIsHit(e2.getPart(LifePart.class), false);
+        return false;
     }
     public void setIsHit(LifePart lifePart, boolean isHit){
         lifePart.setIsHit(isHit);

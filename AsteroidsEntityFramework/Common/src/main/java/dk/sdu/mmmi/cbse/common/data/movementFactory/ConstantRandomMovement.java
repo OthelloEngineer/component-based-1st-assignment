@@ -7,15 +7,7 @@ public class ConstantRandomMovement implements MovementFactory{
     Movement movement;
     public ConstantRandomMovement() {
         System.out.print("new movement: ");
-        double random = Math.random();
         this.movement = new Movement();
-        if(random<0.33){
-            System.out.print("Right \n");
-            movement.setRight(true);
-        } else if (random<0.66) {
-            System.out.print("Left \n");
-            movement.setLeft(true);
-        }
     }
 
     @Override

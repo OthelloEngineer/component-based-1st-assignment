@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.playersystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -11,7 +12,7 @@ import java.util.Random;
 
 public class AsteroidsPlugin implements IGamePluginService {
 
-    private Entity enemy;
+    private Entity asteroid;
 
     public AsteroidsPlugin() {
     }
@@ -20,32 +21,32 @@ public class AsteroidsPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         
         // Add entities to the world
-        enemy = createEnemyShip(gameData);
-        world.addEntity(enemy);
+        asteroid = createAsteroid(gameData);
+        world.addEntity(asteroid);
     }
 
-    private Entity createEnemyShip(GameData gameData) {
+    private Entity createAsteroid(GameData gameData) {
 
         float deacceleration = 10;
         float acceleration = 200;
         float maxSpeed = 200;
         float rotationSpeed = 3;
         Random random = new Random();
-        float x = random.nextFloat(gameData.getDisplayWidth()+1);
-        float y = random.nextFloat(gameData.getDisplayWidth()+1);
-        float radians = 3.1415f / 2;
-        
-        Entity playerShip = new Asteroids();
-        playerShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
-        playerShip.add(new PositionPart(x, y, radians));
-        
-        return playerShip;
+        float x = random.nextFloat(gameData.getDisplayWidth());
+        float y = random.nextFloat(gameData.getDisplayWidth());
+        //float radians = 3.1415f / 2;
+        float radians = random.nextFloat((float)Math.PI*2);
+        Entity asteroid = new Asteroids();
+        asteroid.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
+        asteroid.add(new PositionPart(x, y, radians));
+        asteroid.add(new LifePart(100,20));
+        return asteroid;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
         // Remove entities
-        world.removeEntity(enemy);
+        world.removeEntity(asteroid);
     }
 
 }

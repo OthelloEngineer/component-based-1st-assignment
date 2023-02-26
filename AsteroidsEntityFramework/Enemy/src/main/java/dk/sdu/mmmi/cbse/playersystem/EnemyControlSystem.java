@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.playersystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -24,6 +25,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float[] shapex = entity.getShapeX();
         float[] shapey = entity.getShapeY();
         PositionPart positionPart = entity.getPart(PositionPart.class);
+
         float x = positionPart.getX();
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
@@ -46,20 +48,23 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        int counter = 0;
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
-
+            LifePart lifePart = enemy.getPart(LifePart.class);
             calculateMovement(movingPart);
-
+            if(lifePart.isIsHit()){
+                handleCollider(world, enemy);
+            }
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
-
             updateShape(enemy);
         }
     }
-
+    private void handleCollider(World world, Entity enemy){
+        System.out.println("enemy was hit");
+        world.removeEntity(enemy);
+    }
     private void calculateMovement(MovingPart movingPart){
         this.movementFactory.getNewMovement(movingPart);
     }
