@@ -36,7 +36,7 @@ public class AsteroidsPlugin implements IGamePluginService, IRunTimeInstantiator
         Entity asteroid = new Asteroids();
         asteroid.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
         asteroid.add(new PositionPart(x, y, radians));
-        asteroid.add(new LifePart(100,1));
+        asteroid.add(new LifePart(100,50));
         return asteroid;
     }
 

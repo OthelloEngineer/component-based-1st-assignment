@@ -49,7 +49,7 @@ public class BulletPlugin implements IGamePluginService, IRunTimeInstantiator {
     @Override
     public Entity createEntity(PositionPart positionPart) {
         Bullet newBullet = new Bullet();
-        newBullet.add(new MovingPart(1, 500, 500, 0));
+        newBullet.add(new MovingPart(1, 1500, 1500, 0));
         newBullet.add(new LifePart(100,1));
         newBullet.add(positionPart);
         return newBullet;

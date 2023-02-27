@@ -8,7 +8,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
 import dk.sdu.mmmi.cbse.common.services.ShooterPlugin;
 
 public class PlayerPlugin extends ShooterPlugin implements IGamePluginService {

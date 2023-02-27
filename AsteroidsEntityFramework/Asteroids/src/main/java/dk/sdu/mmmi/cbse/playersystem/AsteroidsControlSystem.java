@@ -77,7 +77,7 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
             float radians = random.nextFloat((float)Math.PI*2);
             entity.add(new MovingPart(10, 200, 200, 3));
             entity.add(new PositionPart(x, y, radians));
-            entity.add(new LifePart(100,20));
+            entity.add(new LifePart(100,Asteroids.ASTREOID_EXPIRATION));
             world.addEntity(entity);
             asteroidTimer = 0;
         }
@@ -89,15 +89,15 @@ public class AsteroidsControlSystem implements IEntityProcessingService {
             return;
         }
         LifePart lifePart = enemy.getPart(LifePart.class);
-        lifePart.setExpiration(5);
+        lifePart.setExpiration(Asteroids.ASTREOID_EXPIRATION);
         enemy.setRadius(newRadius);
         Entity newAsteroid = new Asteroids();
         newAsteroid.setRadius(newRadius);
         PositionPart oldPos = enemy.getPart(PositionPart.class);
         oldPos.setRadians((float) (oldPos.getRadians()+Math.PI/4));
         newAsteroid.add(new MovingPart(10, 200, 200, 3));
-        newAsteroid.add(new PositionPart(oldPos.getX()+10, oldPos.getY()+10, (float) (oldPos.getRadians()-Math.PI*1)));
-        newAsteroid.add(new LifePart(100,5));
+        newAsteroid.add(new PositionPart(oldPos.getX()+25, oldPos.getY()+25, (float) (oldPos.getRadians()-Math.PI*1)));
+        newAsteroid.add(new LifePart(100,Asteroids.ASTREOID_EXPIRATION));
         world.addEntity(newAsteroid);
     }
 }

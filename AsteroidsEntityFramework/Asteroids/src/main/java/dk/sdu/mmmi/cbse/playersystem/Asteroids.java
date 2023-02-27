@@ -9,7 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
  * @author corfixen
  */
 public class Asteroids extends Entity implements Cloneable {
-
+    protected static float ASTREOID_EXPIRATION = 25;
     public Asteroids() {
         super.setColor(Color.YELLOW);
         super.setRadius(100);

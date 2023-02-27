@@ -50,9 +50,10 @@ public class Game
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-        final int asteroidCount = 5;
+
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
+        final int asteroidCount = 5;
         List<IGamePluginService> asPlugins = new ArrayList<>() {{
             for (int i = 0; i < asteroidCount; i++) {
                 add(new AsteroidsPlugin());
@@ -98,8 +99,8 @@ public class Game
         // Update
         for (IEntityProcessingService entityProcessorService : entityProcessors) {
             entityProcessorService.process(gameData, world);
-            this.collisionDetector.process(gameData, world);
         }
+        this.collisionDetector.process(gameData, world);
     }
 
     private void draw() {

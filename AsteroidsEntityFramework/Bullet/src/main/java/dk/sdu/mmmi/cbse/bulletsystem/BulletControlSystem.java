@@ -9,9 +9,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.ConstantRandomMovement;
 import dk.sdu.mmmi.cbse.common.data.movementFactory.MovementFactory;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.bulletsystem.Bullet;
-
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
 
 /**
  *
@@ -47,8 +44,8 @@ public class BulletControlSystem implements IEntityProcessingService {
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
 
-        shapex[0] = (float) (x + Math.cos(radians) * 8);
-        shapey[0] = (float) (y + Math.sin(radians) * 8);
+        shapex[0] = (float) (x + Math.cos(radians) * 16);
+        shapey[0] = (float) (y + Math.sin(radians) * 16);
 
         shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 8);
         shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * 8);
@@ -64,6 +61,7 @@ public class BulletControlSystem implements IEntityProcessingService {
     }
 
     private void handleCollider(World world, Entity bullet){
+        System.out.println("bullet collided");
         world.removeEntity(bullet);
     }
 
