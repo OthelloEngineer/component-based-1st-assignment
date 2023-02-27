@@ -8,6 +8,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.playersystem.Enemy;
 import javafx.geometry.Pos;
 
 import java.util.*;
@@ -27,8 +28,8 @@ public class CollisionDetector implements IPostEntityProcessingService {
                 if(isColliding(entityList.get(i), entityList.get(j))) {
                     colliders.add(entityList.get(i));
                     colliders.add(entityList.get(j));
-                    if (entityList.get(i) instanceof Bullet || entityList.get(j) instanceof Bullet){
-                        System.out.println("bullet set as hit");
+                    if (entityList.get(i) instanceof Enemy || entityList.get(j) instanceof Enemy){
+                        System.out.println("Enemy set as hit");
                     }
                 }
             }
@@ -40,7 +41,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
         LifePart e1Life = e1.getPart(LifePart.class);
         LifePart e2Life = e2.getPart(LifePart.class);
         float expiration = e1Life.getExpiration() + e2Life.getExpiration();
-        if(expiration>0){
+        if(e1Life.getExpiration() > 0 || e2Life.getExpiration() > 0 ){
             return false;
         }
 

@@ -36,6 +36,7 @@ public class PlayerPlugin extends ShooterPlugin implements IGamePluginService {
         float radians = 3.1415f / 2;
         
         Entity playerShip = new Player();
+        playerShip.setRadius(20);
         playerShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
         playerShip.add(new PositionPart(x, y, radians));
         playerShip.add(new LifePart(100,5));

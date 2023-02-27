@@ -29,6 +29,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             if(lifePart.isIsHit()) {
                 handleCollider(world, player);
             }
+            lifePart.setExpiration(lifePart.getExpiration()-1);
             movingPart.setLeft(gameData.getKeys().isDown(LEFT));
             movingPart.setRight(gameData.getKeys().isDown(RIGHT));
             movingPart.setUp(gameData.getKeys().isDown(UP));

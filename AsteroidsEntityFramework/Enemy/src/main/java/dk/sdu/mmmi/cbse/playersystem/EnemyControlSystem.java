@@ -54,8 +54,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
             LifePart lifePart = enemy.getPart(LifePart.class);
             calculateMovement(movingPart);
             if(lifePart.isIsHit()){
+                System.out.println("enemy hit");
                 handleCollider(world, enemy);
             }
+            lifePart.setExpiration(lifePart.getExpiration()-1);
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
             updateShape(enemy);

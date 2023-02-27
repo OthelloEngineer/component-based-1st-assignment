@@ -26,9 +26,11 @@ public class BulletControlSystem implements IEntityProcessingService {
             PositionPart positionPart = player.getPart(PositionPart.class);
             MovingPart movingPart = player.getPart(MovingPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
-            if(lifePart.isIsHit()) {
+            if(lifePart.isIsHit() || lifePart.getLife() <= 0) {
                 handleCollider(world, player);
             }
+            lifePart.setLife(lifePart.getLife()-1);
+            lifePart.setExpiration(lifePart.getExpiration()-1);
             this.movementFactory.getNewMovement(movingPart);
             lifePart.process(gameData, player);
             movingPart.process(gameData, player);
