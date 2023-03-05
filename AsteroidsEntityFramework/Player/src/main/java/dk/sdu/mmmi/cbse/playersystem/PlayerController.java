@@ -8,13 +8,13 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.services.ShooterPlugin;
+import dk.sdu.mmmi.cbse.common.events.ShooterController;
 
-public class PlayerPlugin extends ShooterPlugin implements IGamePluginService {
+public class PlayerController extends ShooterController implements IGamePluginService {
 
     private Entity player;
 
-    public PlayerPlugin() {
+    public PlayerController() {
         super(new BulletPlugin(), 0.5f);
     }
 

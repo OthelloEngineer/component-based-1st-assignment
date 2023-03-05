@@ -1,10 +1,12 @@
-package dk.sdu.mmmi.cbse.common.services;
+package dk.sdu.mmmi.cbse.common.events;
 
-public abstract class ShooterPlugin {
+import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
+
+public abstract class ShooterController {
     private IRunTimeInstantiator runTimeInstantiator;
     protected final float maxProjectileCooldown;
     protected float projectileCooldown;
-    public ShooterPlugin(IRunTimeInstantiator projectTile, float projectileCooldown){
+    public ShooterController(IRunTimeInstantiator projectTile, float projectileCooldown){
         this.runTimeInstantiator = projectTile;
         this.maxProjectileCooldown = projectileCooldown;
     }

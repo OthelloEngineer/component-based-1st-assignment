@@ -7,7 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.events.ShooterController;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
 
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
 
@@ -15,32 +17,36 @@ import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
  *
  * @author jcs
  */
-public class PlayerControlSystem implements IEntityProcessingService {
+public class PlayerControlSystem extends ShooterController implements IEntityProcessingService {
 
-    public PlayerControlSystem() {
+
+    public PlayerControlSystem(IRunTimeInstantiator projectTile, float projectileCooldown) {
+        super(projectTile, projectileCooldown);
     }
 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
-            PositionPart positionPart = player.getPart(PositionPart.class);
-            MovingPart movingPart = player.getPart(MovingPart.class);
-            LifePart lifePart = player.getPart(LifePart.class);
-            if(lifePart.isIsHit()) {
-                handleCollider(world, player);
+            if (player instanceof Player playerCast) {
+                PositionPart positionPart = playerCast.getPart(PositionPart.class);
+                MovingPart movingPart = playerCast.getPart(MovingPart.class);
+                LifePart lifePart = playerCast.getPart(LifePart.class);
+                if (lifePart.isIsHit()) {
+                    handleCollider(world, playerCast);
+                }
+                lifePart.setExpiration(lifePart.getExpiration() - 1);
+                movingPart.setLeft(gameData.getKeys().isDown(LEFT));
+                movingPart.setRight(gameData.getKeys().isDown(RIGHT));
+                movingPart.setUp(gameData.getKeys().isDown(UP));
+                lifePart.process(gameData, playerCast);
+                movingPart.process(gameData, playerCast);
+                positionPart.process(gameData, playerCast);
+                if (gameData.getKeys().isDown(SPACE)) {
+                    shoot(playerCast, world);
+                }
+                playerCast.shooterPlugin.decrementCooldown(gameData.getDelta());
+                updateShape(playerCast);
             }
-            lifePart.setExpiration(lifePart.getExpiration()-1);
-            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(UP));
-            lifePart.process(gameData, player);
-            movingPart.process(gameData, player);
-            positionPart.process(gameData, player);
-            if(gameData.getKeys().isDown(SPACE)){
-                shoot((Player)player, world);
-            }
-            ((Player) player).shooterPlugin.decrementCooldown(gameData.getDelta());
-            updateShape(player);
         }
     }
     private void shoot(Player player, World world){

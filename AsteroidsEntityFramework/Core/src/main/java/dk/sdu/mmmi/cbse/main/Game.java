@@ -13,6 +13,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IRunTimeInstantiator;
 import dk.sdu.mmmi.cbse.common.util.SPILocator;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
 import dk.sdu.mmmi.cbse.playersystem.*;
@@ -102,6 +103,9 @@ public class Game
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+        for (IRunTimeInstantiator runTimeInstantiator : getRuntimeInstatiators()){
+            runTimeInstantiator.createEntity()
+        }
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.process(gameData, world);
         }
@@ -141,7 +145,9 @@ public class Game
     private Collection<? extends IGamePluginService> getPluginServices() {
         return SPILocator.locateAll(IGamePluginService.class);
     }
-
+    private Collection<? extends IRunTimeInstantiator> getRuntimeInstatiators() {
+        return SPILocator.locateAll(IRunTimeInstantiator.class);
+    }
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
